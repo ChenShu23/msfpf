@@ -1,10 +1,10 @@
 import torch
 from torch import nn
 import torch.nn.functional as F
-from .Self_Definition_Layer.attention_Layer import Channel_AttentionLayer, SpatialSELayer, Self_attentionLayer
-from .Self_Definition_Layer.Transformer_Layer import PositionalEncoding
-from .Self_Definition_Layer.Fusion_Layer import Weighted_Fusion, Weighted_Fusion3, Weighted_Fusion4, ElementWiseFusion
-from .Self_Definition_Layer.DenseCNN_layer import DenseCNN
+from .Network_Layer.attention_Layer import Channel_AttentionLayer, SpatialSELayer, Self_attentionLayer
+from .Network_Layer.Transformer_Layer import PositionalEncoding
+from .Network_Layer.Fusion_Layer import Weighted_Fusion, Weighted_Fusion3, Weighted_Fusion4, ElementWiseFusion
+from .Network_Layer.DenseCNN_layer import DenseCNN
 
 
 class Definition_Network(nn.Module):
