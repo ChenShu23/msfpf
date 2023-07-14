@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import torch, os, time
 from DataLoader import Get_DataLoader
-from Network.Model import Definition_Network
+from model.network import Definition_Network
 from tensorboardX import SummaryWriter
 from utils.earlystopping import EarlyStopping
 
