@@ -135,4 +135,4 @@ def Model_test():
 
 
 if __name__ == '__main__':
-    Model_train()
+    Model_test()
