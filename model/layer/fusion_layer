@@ -1,0 +1,117 @@
+import torch
+from torch import nn
+from .attention_Layer import AttentionLayer
+from torch.nn.parameter import Parameter
+from torch.nn.modules.module import Module
+
+# two matrix
+class Weighted_Fusion(Module):
+    def __init__(self, in_features, out_features, bias=False):   # in_features = input timesteps
+        super(Weighted_Fusion, self).__init__()
+        self.in_features = in_features
+        self.out_features = out_features
+        self.w = Parameter(torch.FloatTensor(in_features).type(torch.float32))  # Learnable parameters
+        if bias:
+            self.bias = Parameter(torch.FloatTensor(out_features).type(torch.float32))  # Learnable parameters
+        else:
+            self.register_parameter('bias', None)  
+        self.reset_parameters()
+
+    def reset_parameters(self):
+        self.w = Parameter(torch.ones(self.in_features).type(torch.float32))
+
+    def forward(self, X1, X2):
+        w1 = torch.exp(self.w[0]) / torch.sum(torch.exp(self.w))
+        w2 = torch.exp(self.w[1]) / torch.sum(torch.exp(self.w))
+
+        out_put = X1 * w1 + X2 * w2                  # Variation_1
+
+        return out_put
+
+# three matrix
+class Weighted_Fusion3(Module):
+    def __init__(self, in_features, out_features, bias=False):   # in_features = input timesteps
+        super(Weighted_Fusion3, self).__init__()
+        self.in_features = in_features
+        self.out_features = out_features
+        self.w = Parameter(torch.FloatTensor(in_features).type(torch.float32))  # Learnable parameters
+        self.w.requiresGrad = True
+        if bias:
+            self.bias = Parameter(torch.FloatTensor(out_features).type(torch.float32))  # Learnable parameters
+        else:
+            self.register_parameter('bias', None)  
+        self.reset_parameters()
+
+    def reset_parameters(self):
+        self.w = Parameter(torch.ones(self.in_features).type(torch.float32))
+
+    def forward(self, X1, X2, X3):
+        w1 = torch.exp(self.w[0]) / torch.sum(torch.exp(self.w))
+        w2 = torch.exp(self.w[1]) / torch.sum(torch.exp(self.w))
+        w3 = torch.exp(self.w[2]) / torch.sum(torch.exp(self.w))
+
+        out_put = X1 * w1 + X2 * w2 + X3 * w3
+
+        return out_put
+
+# four matrix
+class Weighted_Fusion4(Module):
+    def __init__(self, in_features, out_features, bias=False):   # in_features是输入时间步
+        super(Weighted_Fusion4, self).__init__()
+        self.in_features = in_features
+        self.out_features = out_features
+        self.w = Parameter(torch.FloatTensor(in_features).type(torch.float32))  #  Learnable parameters
+        self.w.requiresGrad = True
+        if bias:
+            self.bias = Parameter(torch.FloatTensor(out_features).type(torch.float32))  #  Learnable parameters
+        else:
+            self.register_parameter('bias', None) 
+        self.reset_parameters()
+
+    def reset_parameters(self):
+        self.w = Parameter(torch.ones(self.in_features).type(torch.float32))
+
+    def forward(self, X1, X2, X3, X4):
+        w1 = torch.exp(self.w[0]) / torch.sum(torch.exp(self.w))
+        w2 = torch.exp(self.w[1]) / torch.sum(torch.exp(self.w))
+        w3 = torch.exp(self.w[2]) / torch.sum(torch.exp(self.w))
+        w4 = torch.exp(self.w[3]) / torch.sum(torch.exp(self.w))
+
+        out_put = X1 * w1 + X2 * w2 + X3 * w3 + X4 * w4
+
+        return out_put
+
+# Element-wise Fusion   3 matrix
+class ElementWiseFusion(nn.Module):
+    def __init__(self, in_features, station_num, pre_len, bias=False):   # infeature = No. of fusing features
+        super(ElementWiseFusion, self).__init__()
+        self.w = nn.Parameter(torch.ones(in_features, station_num * pre_len))
+        self.w.requiresGrad = True
+        if bias:
+            self.bias = Parameter(torch.FloatTensor(in_features, station_num*pre_len).type(torch.float32)) 
+        else:
+            self.register_parameter('bias', None)  
+
+    def forward(self, X1, X2, X3):
+        w1 = self.w[0]
+        w2 = self.w[1]
+        w3 = self.w[2]
+        out_put = X1 * w1 + X2 * w2 + X3 * w3
+        return out_put
+
+# Element-wise Fusion   2 matrix
+class ElementWiseFusion2(nn.Module):
+    def __init__(self, in_features, station_num, pre_len, bias=False):   # infeature = No. of fusing features
+        super(ElementWiseFusion2, self).__init__()
+        self.w = nn.Parameter(torch.ones(in_features, station_num * pre_len))
+        self.w.requiresGrad = True
+        if bias:
+            self.bias = Parameter(torch.FloatTensor(in_features, station_num*pre_len).type(torch.float32))  
+        else:
+            self.register_parameter('bias', None)  
+
+    def forward(self, X1, X2):
+        w1 = self.w[0]
+        w2 = self.w[1]
+        out_put = X1 * w1 + X2 * w2
+        return out_put
