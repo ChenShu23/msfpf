@@ -86,7 +86,7 @@ class CALayer(nn.Module):
         return x * y
 
 class Self_attentionLayer(nn.Module):
-    def __init__(self, dim_in, dim_k, dim_v):   # 特征维度
+    def __init__(self, dim_in, dim_k, dim_v):   # Feature Dimension
         super(Self_attentionLayer, self).__init__()
         self.dim_in = dim_in
         self.dim_k = dim_k
